@@ -1,0 +1,456 @@
+// Mock notes that mirror the shape of `SearchResult` from videodistill.kb
+// (canonical_concept_id, collection, source_video, source_timestamp, concept,
+// summary, code_language, score) plus review-only fields the UI uses
+// (importance, order, oneline, headline, code, depends_on) and quiz fields
+// (question, keyPoints — used to grade a typed answer against the notes).
+//
+// Swap this file for live /api/search + /api/ask calls when the FastAPI backend
+// in backend/ is up. The UI reads nothing else about the data.
+//
+// keyPoints: each is one idea the answer should contain; `kw` are accepted
+// keywords/synonyms. The mock grader scores answer = matched points / total.
+
+export const CONCEPTS = [
+  // ---- C ----
+  {
+    canonical_concept_id: "c-pointers-basics",
+    collection: "c",
+    source_video: "L03 — Pointers & Addresses",
+    source_timestamp: "00:12:40",
+    concept: "Pointers hold addresses",
+    headline: "A pointer stores the address of another object.",
+    oneline: "`&x` takes an address; `*p` dereferences it back to the value.",
+    summary:
+      "A pointer variable stores the memory address of another object. `&x` yields the address of `x`; `*p` dereferences the pointer to read or write the pointed-to value. The pointer's own type records what it points at, which is how the compiler knows how many bytes to read and how pointer arithmetic scales.",
+    code_language: "c",
+    code: "int x = 42;\nint *p = &x;   // p holds the address of x\n*p = 7;        // writes through p; now x == 7",
+    depends_on: [],
+    importance: 5,
+    order: 1,
+    score: 0.94,
+    question: "What does a pointer actually store, and what do `&` and `*` do?",
+    keyPoints: [
+      { point: "A pointer stores an address", kw: ["address", "location", "points to", "memory"] },
+      { point: "`&` takes the address of a variable", kw: ["&", "address-of", "address of"] },
+      { point: "`*` dereferences to the value", kw: ["dereference", "*p", "value", "deref"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-arrays-decay",
+    collection: "c",
+    source_video: "L05 — Arrays & Pointer Decay",
+    source_timestamp: "00:21:05",
+    concept: "Array-to-pointer decay",
+    headline: "Arrays decay to a pointer to their first element.",
+    oneline: "Passing an array to a function loses its length — it becomes `T*`.",
+    summary:
+      "In most expressions an array name converts ('decays') to a pointer to its first element. This is why a function parameter written as `int a[]` is really `int *a`, and why `sizeof` inside that function gives the pointer size, not the array size. You must pass the length separately.",
+    code_language: "c",
+    code: "void sum(int a[], int n); // a is really int*\nint v[10];\nsum(v, 10);               // length must travel with the array",
+    depends_on: ["c-pointers-basics"],
+    importance: 4,
+    order: 2,
+    score: 0.88,
+    question: "What is array-to-pointer decay, and why must you pass an array's length separately?",
+    keyPoints: [
+      { point: "Array name becomes a pointer to first element", kw: ["decay", "pointer", "first element"] },
+      { point: "The length information is lost", kw: ["length", "lost", "size", "sizeof"] },
+      { point: "Pass the count as a separate argument", kw: ["separate", "pass", "argument", "count", "n"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-malloc-free",
+    collection: "c",
+    source_video: "L08 — Dynamic Memory",
+    source_timestamp: "00:34:18",
+    concept: "malloc / free ownership",
+    headline: "You own every byte malloc gives you until you free it.",
+    oneline: "`malloc` returns raw bytes; every `malloc` needs exactly one `free`.",
+    summary:
+      "`malloc(n)` reserves n uninitialised bytes on the heap and returns a pointer (or NULL on failure). The memory lives until you `free` it exactly once. Forgetting to free leaks; freeing twice or using after free is undefined behaviour. Always check for NULL and pair every allocation with one release.",
+    code_language: "c",
+    code: "int *buf = malloc(n * sizeof *buf);\nif (!buf) return -1;   // allocation can fail\n/* ... use buf ... */\nfree(buf);             // exactly once",
+    depends_on: ["c-pointers-basics"],
+    importance: 5,
+    order: 3,
+    score: 0.91,
+    question: "Explain the ownership rules for `malloc` and `free`. What can go wrong?",
+    keyPoints: [
+      { point: "malloc reserves heap memory, may return NULL", kw: ["heap", "null", "reserve", "allocate"] },
+      { point: "Every malloc needs exactly one free", kw: ["free", "one", "once", "pair"] },
+      { point: "Leaks / double-free / use-after-free are bugs", kw: ["leak", "double", "use after free", "undefined"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-strings-nul",
+    collection: "c",
+    source_video: "L06 — Strings",
+    source_timestamp: "00:09:52",
+    concept: "NUL-terminated strings",
+    headline: "A C string is chars ending in a '\\0' byte.",
+    oneline: "Length is found by scanning to the `\\0`; buffers need room for it.",
+    summary:
+      "C has no string type: a string is a `char` array whose end is marked by a `'\\0'` byte. Functions like `strlen` scan for that terminator, so a missing NUL reads past the buffer. Always size buffers for length + 1 and prefer bounded functions (`snprintf`) to avoid overruns.",
+    code_language: "c",
+    code: "char s[6] = \"hello\"; // 5 chars + '\\0'\nsize_t n = strlen(s); // scans to '\\0' -> 5",
+    depends_on: ["c-arrays-decay"],
+    importance: 3,
+    order: 4,
+    score: 0.83,
+    question: "How does C represent a string, and why must buffers be sized for length + 1?",
+    keyPoints: [
+      { point: "A char array ending in '\\0'", kw: ["char", "array", "\\0", "nul", "terminat"] },
+      { point: "Length found by scanning to the terminator", kw: ["scan", "strlen", "length"] },
+      { point: "Need room for the extra terminator byte", kw: ["+1", "length + 1", "room", "overrun", "buffer"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-structs",
+    collection: "c",
+    source_video: "L07 — Structs",
+    source_timestamp: "00:15:30",
+    concept: "Structs group related data",
+    headline: "A struct bundles named fields into one value.",
+    oneline: "Access fields with `.`; through a pointer use `->`.",
+    summary:
+      "A `struct` aggregates several named members into a single compound type. Access members with `.` on a value or `->` through a pointer. Members are laid out in order but the compiler may insert padding for alignment, so `sizeof` a struct can exceed the sum of its fields.",
+    code_language: "c",
+    code: "struct Point { int x, y; };\nstruct Point p = {1, 2};\nstruct Point *pp = &p;\npp->x = 5;   // same as (*pp).x",
+    depends_on: ["c-pointers-basics"],
+    importance: 3,
+    order: 5,
+    score: 0.8,
+    question: "What is a struct, and how do you access its members by value vs through a pointer?",
+    keyPoints: [
+      { point: "Groups named members into one type", kw: ["group", "members", "fields", "aggregate"] },
+      { point: "`.` on a value, `->` through a pointer", kw: [".", "->", "arrow", "dot"] },
+      { point: "Padding can change its size", kw: ["padding", "align", "sizeof"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-undefined-behaviour",
+    collection: "c",
+    source_video: "L11 — Undefined Behaviour",
+    source_timestamp: "00:41:07",
+    concept: "Undefined behaviour",
+    headline: "UB lets the compiler assume it never happens.",
+    oneline: "Out-of-bounds, use-after-free, signed overflow — anything can result.",
+    summary:
+      "When a program triggers undefined behaviour (buffer overrun, use-after-free, signed integer overflow, data races), the standard imposes no requirements at all. The compiler is allowed to assume UB never occurs and optimise on that basis, so bugs can appear far from their cause. Treat UB as a defect, not a portable trick.",
+    code_language: "c",
+    code: "int a[3];\na[3] = 0;   // out of bounds -> UB, not a guaranteed crash",
+    depends_on: ["c-arrays-decay", "c-malloc-free"],
+    importance: 4,
+    order: 6,
+    score: 0.86,
+    question: "What is undefined behaviour, and why is it dangerous to rely on it?",
+    keyPoints: [
+      { point: "Standard imposes no requirements", kw: ["no requirement", "standard", "anything", "undefined"] },
+      { point: "Compiler assumes it never happens", kw: ["assume", "optimi", "compiler"] },
+      { point: "Examples: overflow, out-of-bounds, use-after-free", kw: ["overflow", "out of bounds", "use after free", "race"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-const-correctness",
+    collection: "c",
+    source_video: "L09 — const & Pointers",
+    source_timestamp: "00:19:44",
+    concept: "const qualifier",
+    headline: "`const` promises not to modify through this access path.",
+    oneline: "Read pointer declarations right-to-left to see what's const.",
+    summary:
+      "`const` marks a value as read-only through a given name or pointer. For pointers, position matters: `const int *p` points at a constant int, while `int *const p` is a constant pointer. Reading declarations right-to-left clarifies which part is fixed.",
+    code_language: "c",
+    code: "const int *p;   // can't change *p, can move p\nint *const q;   // can change *q, can't move q",
+    depends_on: ["c-pointers-basics"],
+    importance: 2,
+    order: 7,
+    score: 0.72,
+    question: "What does `const` promise, and how does its position change a pointer's meaning?",
+    keyPoints: [
+      { point: "Marks read-only through that access path", kw: ["read-only", "read only", "not modify", "immutable"] },
+      { point: "Position: pointee-const vs pointer-const", kw: ["position", "const int *", "*const", "pointer"] },
+      { point: "Read declarations right-to-left", kw: ["right-to-left", "right to left"] },
+    ],
+  },
+  {
+    canonical_concept_id: "c-header-guards",
+    collection: "c",
+    source_video: "L02 — Headers & Compilation",
+    source_timestamp: "00:27:11",
+    concept: "Include guards",
+    headline: "Guards stop a header being included twice.",
+    oneline: "Wrap headers in `#ifndef/#define/#endif` (or `#pragma once`).",
+    summary:
+      "Including the same header twice re-declares its contents and breaks the build. An include guard (`#ifndef NAME / #define NAME / ... / #endif`) or `#pragma once` ensures the body is processed only once per translation unit.",
+    code_language: "c",
+    code: "#ifndef POINT_H\n#define POINT_H\nstruct Point { int x, y; };\n#endif",
+    depends_on: [],
+    importance: 2,
+    order: 8,
+    score: 0.68,
+    question: "Why do headers need include guards, and how do you write one?",
+    keyPoints: [
+      { point: "Prevents double inclusion / redeclaration", kw: ["twice", "double", "redeclar", "once"] },
+      { point: "`#ifndef / #define / #endif`", kw: ["#ifndef", "#define", "#endif"] },
+      { point: "`#pragma once` is an alternative", kw: ["pragma once", "#pragma"] },
+    ],
+  },
+
+  // ---- C++ ----
+  {
+    canonical_concept_id: "cpp-raii",
+    collection: "cpp",
+    source_video: "L04 — RAII & Lifetimes",
+    source_timestamp: "00:08:15",
+    concept: "RAII ties resources to scope",
+    headline: "Acquire in the constructor, release in the destructor.",
+    oneline: "When an object goes out of scope its destructor frees its resource.",
+    summary:
+      "RAII (Resource Acquisition Is Initialisation) binds a resource's lifetime to an object's. The constructor acquires (memory, a file, a lock) and the destructor releases it, so leaving scope — even by exception — cleans up automatically. This is the backbone of exception-safe C++.",
+    code_language: "cpp",
+    code: "{\n  std::ifstream f(\"data.txt\"); // opens\n  use(f);\n} // f's destructor closes the file, always",
+    depends_on: [],
+    importance: 5,
+    order: 1,
+    score: 0.95,
+    question: "What is RAII, and why does it make C++ code exception-safe?",
+    keyPoints: [
+      { point: "Ties a resource's lifetime to an object", kw: ["lifetime", "scope", "object", "tie", "bind"] },
+      { point: "Acquire in constructor, release in destructor", kw: ["constructor", "destructor", "acquire", "release"] },
+      { point: "Cleans up even on exceptions", kw: ["exception", "automatic", "cleanup", "clean up"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-move-semantics",
+    collection: "cpp",
+    source_video: "L12 — Move Semantics",
+    source_timestamp: "00:22:38",
+    concept: "Move semantics",
+    headline: "Moving steals resources instead of copying them.",
+    oneline: "An rvalue can have its guts transferred, leaving the source empty.",
+    summary:
+      "Move semantics let an object transfer ownership of its internals (heap buffer, handle) to another instead of deep-copying. Move constructors/assignment take an rvalue reference (`T&&`) and leave the source in a valid but unspecified state. `std::move` casts an lvalue to an rvalue so it can be moved from.",
+    code_language: "cpp",
+    code: "std::vector<int> a = make();\nstd::vector<int> b = std::move(a); // steals a's buffer\n// a is now empty but valid",
+    depends_on: ["cpp-raii"],
+    importance: 5,
+    order: 2,
+    score: 0.93,
+    question: "How do move semantics work, and what does `std::move` actually do?",
+    keyPoints: [
+      { point: "Transfers ownership instead of deep-copying", kw: ["transfer", "steal", "ownership", "instead of copy", "no copy"] },
+      { point: "Uses an rvalue reference `T&&`", kw: ["rvalue", "&&", "reference"] },
+      { point: "`std::move` casts an lvalue to an rvalue", kw: ["std::move", "cast", "lvalue"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-smart-pointers",
+    collection: "cpp",
+    source_video: "L13 — Smart Pointers",
+    source_timestamp: "00:16:02",
+    concept: "unique_ptr / shared_ptr",
+    headline: "Smart pointers automate ownership and freeing.",
+    oneline: "`unique_ptr` = one owner; `shared_ptr` = reference-counted sharing.",
+    summary:
+      "Smart pointers apply RAII to dynamic memory. `std::unique_ptr` is a single, move-only owner that frees on destruction. `std::shared_ptr` reference-counts so the last owner frees; use `std::weak_ptr` to break cycles. Prefer these over raw `new`/`delete`.",
+    code_language: "cpp",
+    code: "auto p = std::make_unique<Widget>();\nauto s = std::make_shared<Widget>();\n// freed automatically when the last owner dies",
+    depends_on: ["cpp-raii", "cpp-move-semantics"],
+    importance: 5,
+    order: 3,
+    score: 0.9,
+    question: "Compare `unique_ptr` and `shared_ptr`. When does each free its object?",
+    keyPoints: [
+      { point: "unique_ptr: single move-only owner", kw: ["unique", "single", "one owner", "move-only", "move only"] },
+      { point: "shared_ptr: reference-counted, last owner frees", kw: ["shared", "reference count", "ref count", "count", "last"] },
+      { point: "Apply RAII, replace raw new/delete", kw: ["raii", "new", "delete", "automatic"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-references",
+    collection: "cpp",
+    source_video: "L03 — References",
+    source_timestamp: "00:11:20",
+    concept: "References are aliases",
+    headline: "A reference is another name for an existing object.",
+    oneline: "Must be bound at creation and can't be reseated.",
+    summary:
+      "A reference (`T&`) is an alias for an existing object: operations on it act on the original. It must be initialised when declared and cannot later refer to something else. References make pass-by-reference and operator overloading read naturally, without pointer syntax.",
+    code_language: "cpp",
+    code: "int x = 1;\nint &r = x;  // r is another name for x\nr = 9;       // x == 9",
+    depends_on: [],
+    importance: 4,
+    order: 4,
+    score: 0.85,
+    question: "What is a reference, and how does it differ from a pointer?",
+    keyPoints: [
+      { point: "An alias / another name for an object", kw: ["alias", "another name", "refers", "same object"] },
+      { point: "Must be bound at creation", kw: ["initialis", "initializ", "bound", "at creation", "declared"] },
+      { point: "Cannot be reseated", kw: ["reseat", "cannot change", "can't change", "rebind"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-templates",
+    collection: "cpp",
+    source_video: "L16 — Templates",
+    source_timestamp: "00:19:55",
+    concept: "Templates generate code",
+    headline: "Templates are compile-time blueprints over types.",
+    oneline: "The compiler stamps out a version per type you actually use.",
+    summary:
+      "A template parameterises code over types or values; the compiler instantiates a concrete version for each set of arguments used. This gives type-safe generic containers and algorithms with no runtime cost, at the price of longer compile times and famously verbose errors.",
+    code_language: "cpp",
+    code: "template <class T>\nT max_of(T a, T b) { return a > b ? a : b; }\nmax_of(3, 4);      // instantiates max_of<int>",
+    depends_on: ["cpp-references"],
+    importance: 4,
+    order: 5,
+    score: 0.84,
+    question: "What do templates do, and what are the trade-offs?",
+    keyPoints: [
+      { point: "Parameterise code over types/values", kw: ["parameteris", "parameteriz", "generic", "over types", "type"] },
+      { point: "Compiler instantiates per use", kw: ["instantiat", "compile", "stamp", "per type"] },
+      { point: "No runtime cost, but slow compiles / verbose errors", kw: ["runtime", "no cost", "compile time", "error", "bloat"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-vector",
+    collection: "cpp",
+    source_video: "L09 — std::vector",
+    source_timestamp: "00:07:40",
+    concept: "std::vector growth",
+    headline: "vector is a growable, contiguous array.",
+    oneline: "Amortised O(1) push_back; reallocation invalidates references.",
+    summary:
+      "`std::vector` stores elements contiguously and grows by reallocating to a larger buffer (typically geometric growth) so `push_back` is amortised O(1). Any reallocation invalidates existing pointers, references and iterators. `reserve` up front avoids repeated reallocation.",
+    code_language: "cpp",
+    code: "std::vector<int> v;\nv.reserve(100);      // avoid reallocs\nv.push_back(1);      // amortised O(1)",
+    depends_on: ["cpp-raii"],
+    importance: 3,
+    order: 6,
+    score: 0.82,
+    question: "How does `std::vector` grow, and what does that invalidate?",
+    keyPoints: [
+      { point: "Contiguous storage, grows by reallocating", kw: ["contiguous", "realloc", "grow", "geometric", "double"] },
+      { point: "push_back is amortised O(1)", kw: ["amortis", "amortiz", "o(1)", "push_back"] },
+      { point: "Reallocation invalidates iterators/references", kw: ["invalidate", "iterator", "reference", "pointer"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-virtual",
+    collection: "cpp",
+    source_video: "L18 — Virtual Functions",
+    source_timestamp: "00:24:12",
+    concept: "Virtual dispatch",
+    headline: "virtual picks the override at runtime via the object's type.",
+    oneline: "Call through a base pointer, run the derived override.",
+    summary:
+      "Marking a member `virtual` enables dynamic dispatch: a call through a base pointer or reference runs the most-derived override, resolved at runtime through the vtable. Give polymorphic base classes a `virtual` destructor so deleting through the base cleans up the derived part.",
+    code_language: "cpp",
+    code: "struct Shape { virtual double area() const = 0; virtual ~Shape() = default; };\nstruct Circle : Shape { double area() const override; };",
+    depends_on: ["cpp-references"],
+    importance: 3,
+    order: 7,
+    score: 0.79,
+    question: "What does `virtual` enable, and why do polymorphic bases need a virtual destructor?",
+    keyPoints: [
+      { point: "Dynamic dispatch to the most-derived override", kw: ["dynamic", "dispatch", "override", "runtime", "polymorph"] },
+      { point: "Resolved at runtime via the vtable", kw: ["vtable", "runtime", "table"] },
+      { point: "Virtual destructor to delete through base", kw: ["virtual destructor", "destructor", "delete", "base"] },
+    ],
+  },
+  {
+    canonical_concept_id: "cpp-lambdas",
+    collection: "cpp",
+    source_video: "L15 — Lambdas & Captures",
+    source_timestamp: "00:13:48",
+    concept: "Lambda captures",
+    headline: "A lambda is an inline function object with captured state.",
+    oneline: "`[&]` captures by reference, `[=]` by value — mind lifetimes.",
+    summary:
+      "A lambda creates an anonymous function object. Its capture list decides how it accesses surrounding variables: `[=]` copies them, `[&]` refers to them. Capturing by reference and outliving the referent is a dangling bug, so be deliberate about capture mode for stored callbacks.",
+    code_language: "cpp",
+    code: "int factor = 3;\nauto scale = [factor](int x){ return x * factor; }; // by value\nscale(10); // 30",
+    depends_on: ["cpp-references"],
+    importance: 2,
+    order: 8,
+    score: 0.74,
+    question: "What does a lambda's capture list control, and what's the danger of `[&]`?",
+    keyPoints: [
+      { point: "Anonymous function object with state", kw: ["anonymous", "function object", "closure", "inline"] },
+      { point: "`[=]` by value, `[&]` by reference", kw: ["[=]", "[&]", "by value", "by reference", "capture"] },
+      { point: "Reference capture can dangle", kw: ["dangl", "lifetime", "outliv", "danger"] },
+    ],
+  },
+];
+
+// Canned Q&A used by the mock backend. Answers cite [collection/video @ ts] like
+// answer_question does; the UI turns those into citation chips.
+export const QA_BANK = [
+  {
+    match: ["move", "std::move", "move semantics", "rvalue"],
+    collection: "cpp",
+    answer:
+      "Move semantics let an object hand over its internal resources instead of deep-copying them. A move constructor or move-assignment takes an rvalue reference `T&&` and transfers ownership of things like a heap buffer, leaving the source in a valid but unspecified (typically empty) state. `std::move` doesn't move anything itself — it casts an lvalue to an rvalue so an overload that can steal from it is selected [cpp/L12 — Move Semantics @ 00:22:38]. This is what makes returning and reassigning large containers cheap [cpp/L09 — std::vector @ 00:07:40].",
+    citations: [
+      { collection: "cpp", source_video: "L12 — Move Semantics", source_timestamp: "00:22:38" },
+      { collection: "cpp", source_video: "L09 — std::vector", source_timestamp: "00:07:40" },
+    ],
+  },
+  {
+    match: ["raii", "resource", "destructor", "scope", "lifetime"],
+    collection: "cpp",
+    answer:
+      "RAII binds a resource's lifetime to an object: the constructor acquires the resource and the destructor releases it, so leaving scope — even via an exception — always cleans up [cpp/L04 — RAII & Lifetimes @ 00:08:15]. Smart pointers apply exactly this idea to dynamic memory so you rarely call `delete` by hand [cpp/L13 — Smart Pointers @ 00:16:02].",
+    citations: [
+      { collection: "cpp", source_video: "L04 — RAII & Lifetimes", source_timestamp: "00:08:15" },
+      { collection: "cpp", source_video: "L13 — Smart Pointers", source_timestamp: "00:16:02" },
+    ],
+  },
+  {
+    match: ["malloc", "free", "heap", "dynamic memory", "leak"],
+    collection: "c",
+    answer:
+      "`malloc(n)` reserves n uninitialised bytes on the heap and returns a pointer or NULL on failure, so you must check the result. That memory is yours until you call `free` on it exactly once; forgetting leaks it, and freeing twice or using it afterwards is undefined behaviour [c/L08 — Dynamic Memory @ 00:34:18]. Because these are raw addresses, the same pointer rules apply [c/L03 — Pointers & Addresses @ 00:12:40].",
+    citations: [
+      { collection: "c", source_video: "L08 — Dynamic Memory", source_timestamp: "00:34:18" },
+      { collection: "c", source_video: "L03 — Pointers & Addresses", source_timestamp: "00:12:40" },
+    ],
+  },
+  {
+    match: ["pointer", "address", "dereference", "&", "*p"],
+    collection: "c",
+    answer:
+      "A pointer stores the address of another object. `&x` gives you x's address and `*p` dereferences the pointer to read or write the value it points at. The pointer's type tells the compiler how many bytes to touch and how pointer arithmetic scales [c/L03 — Pointers & Addresses @ 00:12:40].",
+    citations: [
+      { collection: "c", source_video: "L03 — Pointers & Addresses", source_timestamp: "00:12:40" },
+    ],
+  },
+  {
+    match: ["array", "decay", "sizeof"],
+    collection: "c",
+    answer:
+      "In most expressions an array name decays to a pointer to its first element, which is why `int a[]` as a parameter is really `int *a` and `sizeof` inside that function measures the pointer, not the array. The length doesn't travel with the array, so you pass it separately [c/L05 — Arrays & Pointer Decay @ 00:21:05].",
+    citations: [
+      { collection: "c", source_video: "L05 — Arrays & Pointer Decay", source_timestamp: "00:21:05" },
+    ],
+  },
+  {
+    match: ["template", "generic"],
+    collection: "cpp",
+    answer:
+      "A template parameterises code over types or values, and the compiler instantiates a concrete version for each set of arguments you actually use. You get type-safe generic containers and algorithms with no runtime overhead, at the cost of longer compiles and verbose error messages [cpp/L16 — Templates @ 00:19:55].",
+    citations: [
+      { collection: "cpp", source_video: "L16 — Templates", source_timestamp: "00:19:55" },
+    ],
+  },
+  {
+    match: ["virtual", "polymorphism", "override", "vtable"],
+    collection: "cpp",
+    answer:
+      "Marking a member `virtual` turns on dynamic dispatch: a call through a base pointer or reference runs the most-derived override, resolved at runtime via the vtable. Always give a polymorphic base a virtual destructor so deleting through the base also destroys the derived part [cpp/L18 — Virtual Functions @ 00:24:12].",
+    citations: [
+      { collection: "cpp", source_video: "L18 — Virtual Functions", source_timestamp: "00:24:12" },
+    ],
+  },
+];

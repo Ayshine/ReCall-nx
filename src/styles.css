@@ -1,0 +1,1126 @@
+:root {
+  --bg: #0d1117;
+  --bg-elev: #161b22;
+  --bg-elev-2: #1c2230;
+  --border: #2a3140;
+  --border-soft: #222834;
+  --text: #e6edf3;
+  --text-dim: #9aa7b6;
+  --text-faint: #6b7688;
+  --accent: #7c5cff;
+  --accent-2: #22d3ee;
+  --accent-soft: rgba(124, 92, 255, 0.16);
+  --good: #34d399;
+  --warn: #fbbf24;
+  --bad: #f87171;
+  --code-bg: #0b0f16;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --radius: 14px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background: radial-gradient(1200px 600px at 80% -10%, #1a2233 0%, var(--bg) 55%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 22px 80px;
+}
+
+/* ---------- Header ---------- */
+.masthead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.brand h1 {
+  font-size: 30px;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.brand .nx {
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+}
+.tagline {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+/* ---------- Tabs ---------- */
+.tabs {
+  display: inline-flex;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+.tabs button {
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.tabs button.active {
+  background: var(--accent);
+  color: white;
+}
+.tabs button:not(.active):hover {
+  color: var(--text);
+}
+
+/* ---------- Cards / panels ---------- */
+.panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.panel + .panel {
+  margin-top: 18px;
+}
+
+/* ---------- Collection picker ---------- */
+.seg {
+  display: inline-flex;
+  gap: 6px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  padding: 5px;
+  border-radius: 12px;
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.seg button.on {
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* ---------- nx control ---------- */
+.nx-wrap {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 22px;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .nx-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+.nx-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.nx-big {
+  font-family: var(--mono);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+}
+.nx-x {
+  font-size: 26px;
+  color: var(--text-dim);
+}
+.slider {
+  width: 100%;
+  margin: 18px 0 6px;
+  accent-color: var(--accent);
+  height: 6px;
+}
+.nx-ticks {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-faint);
+  font-size: 12px;
+  font-family: var(--mono);
+}
+.presets {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.presets button {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.presets button.on {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--accent-soft);
+}
+.presets .default-tag {
+  font-size: 10px;
+  color: var(--accent-2);
+  margin-left: 4px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.stat {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.stat .k {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+.stat .v {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.stat .v small {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.tier-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ---------- Review runner ---------- */
+.runner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.progress {
+  height: 8px;
+  background: var(--bg-elev-2);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.25s linear;
+}
+.pace-bar {
+  height: 4px;
+  background: var(--bg-elev-2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.pace-bar > i {
+  display: block;
+  height: 100%;
+  background: var(--accent-2);
+}
+
+.concept {
+  /* No min-height. It existed when a card held exactly one concept and needed
+     a stable height to stop the layout jumping between cards; now that a card
+     stacks several, it padded every one — including single-line items — to
+     220px and left the run looking full of holes. */
+}
+.concept .meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.badge.c {
+  color: #93c5fd;
+  border-color: #2b4a6b;
+}
+.badge.cpp {
+  color: #f0abfc;
+  border-color: #5b2b63;
+}
+.imp {
+  display: inline-flex;
+  gap: 2px;
+}
+.imp i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.imp i.on {
+  background: var(--accent);
+}
+.concept h2 {
+  margin: 6px 0 8px;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+}
+.concept .body {
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 15.5px;
+}
+.concept .oneline {
+  color: var(--text-dim);
+  font-size: 16px;
+}
+.concept .headline {
+  color: var(--text);
+  font-size: 19px;
+  font-weight: 600;
+}
+pre.code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 14px 0 0;
+  color: #d6e2f0;
+}
+code.inline {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--bg-elev-2);
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: #d6e2f0;
+}
+.depends {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+.depends b {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.runner-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.btn {
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  border-color: var(--accent);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.btn.ghost {
+  background: transparent;
+}
+.btn-row {
+  display: flex;
+  gap: 10px;
+}
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ---------- citations ---------- */
+.cite {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--accent-2);
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.cite:hover {
+  border-color: var(--accent-2);
+}
+.cite .ts {
+  color: var(--text-dim);
+}
+
+/* ---------- Q&A ---------- */
+.ask-form {
+  display: flex;
+  gap: 10px;
+}
+.ask-form input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  padding: 13px 16px;
+  outline: none;
+}
+.ask-form input:focus {
+  border-color: var(--accent);
+}
+.suggest {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.chip {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.chip:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.answer {
+  line-height: 1.7;
+  font-size: 15.5px;
+  white-space: pre-wrap;
+}
+.answer .cite {
+  margin: 0 1px;
+}
+.notcovered {
+  color: var(--warn);
+}
+.cite-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* recall self-grade */
+.grade {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-soft);
+}
+.grade p {
+  margin: 0 0 10px;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.grade-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.grade-btns button {
+  flex: 1;
+  min-width: 90px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.grade-btns button.miss:hover {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.grade-btns button.foggy:hover {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.grade-btns button.got:hover {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.recall-summary {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.recall-stat {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 16px;
+}
+.recall-stat .n {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+.recall-stat .n.got {
+  color: var(--good);
+}
+.recall-stat .n.foggy {
+  color: var(--warn);
+}
+.recall-stat .n.miss {
+  color: var(--bad);
+}
+.recall-stat .l {
+  font-size: 12px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.section-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-faint);
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+.muted {
+  color: var(--text-dim);
+}
+.center {
+  text-align: center;
+}
+.empty {
+  color: var(--text-dim);
+  text-align: center;
+  padding: 40px 10px;
+}
+.note-banner {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  background: var(--bg-elev-2);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 16px;
+}
+
+/* ---------- Source board ---------- */
+.board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.source-card {
+  position: relative;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+.source-card:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.source-card.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.source-card.pending {
+  cursor: not-allowed;
+  border-style: dashed;
+  opacity: 0.7;
+}
+.source-check {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 12px;
+  color: white;
+  background: transparent;
+}
+.source-card.on .source-check {
+  background: var(--accent);
+}
+.source-label {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.source-label.src-c {
+  color: #93c5fd;
+}
+.source-label.src-cpp {
+  color: #f0abfc;
+}
+.source-label.src-rust {
+  color: #fca5a5;
+}
+.source-label.src-python {
+  color: #fcd34d;
+}
+.source-label.src-go {
+  color: #67e8f9;
+}
+.source-meta {
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+.source-author {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+}
+.source-card.add {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-style: dashed;
+  color: var(--text-dim);
+  min-height: 96px;
+}
+.source-card.add .plus {
+  font-size: 26px;
+  line-height: 1;
+}
+.add-panel {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+}
+.add-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.add-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.add-row .btn {
+  padding: 6px 16px;
+}
+
+/* ---------- Quiz me ---------- */
+.quiz-q {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  margin: 4px 0 16px;
+}
+.quiz-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 14px 16px;
+  resize: vertical;
+  outline: none;
+}
+.quiz-input:focus {
+  border-color: var(--accent);
+}
+.quiz-input:disabled {
+  opacity: 0.75;
+}
+.quiz-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.toggle input {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+}
+.quiz-score-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.quiz-score {
+  font-family: var(--mono);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+}
+.quiz-score.got,
+.quiz-verdict.got {
+  color: var(--good);
+}
+.quiz-score.foggy,
+.quiz-verdict.foggy {
+  color: var(--warn);
+}
+.quiz-score.miss,
+.quiz-verdict.miss {
+  color: var(--bad);
+}
+.quiz-verdict {
+  font-size: 18px;
+  font-weight: 700;
+}
+.point-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.point-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+}
+.point-list li .mark {
+  font-weight: 700;
+  font-family: var(--mono);
+}
+.point-list li.hit .mark {
+  color: var(--good);
+}
+.point-list li.miss {
+  opacity: 0.9;
+}
+.point-list li.miss .mark {
+  color: var(--bad);
+}
+.llm-note {
+  margin-top: 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+.model-answer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--accent-2);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  box-shadow: var(--shadow);
+  z-index: 50;
+}
+
+/* light theme */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f5f7fb;
+    --bg-elev: #ffffff;
+    --bg-elev-2: #eef1f7;
+    --border: #d7dde8;
+    --border-soft: #e5e9f0;
+    --text: #1a2231;
+    --text-dim: #55607280;
+    --text-dim: #566072;
+    --text-faint: #8a93a3;
+    --code-bg: #0f1420;
+    --accent-soft: rgba(124, 92, 255, 0.12);
+    --shadow: 0 10px 30px rgba(20, 30, 60, 0.1);
+  }
+}
+
+
+/* Per-card dwell selector inside the runner. Reuses .presets buttons; the
+   extra rule just gives it breathing room and lets the run-length sit right. */
+.pace-presets {
+  margin: 12px 0 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+/* Quiz question-type selector + multiple choice options. */
+.kind-presets {
+  margin: 0 0 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.quiz-code {
+  margin: 0 0 14px;
+}
+.mcq-list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mcq-option {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option.chosen { border-color: var(--accent); background: var(--accent-soft, rgba(124,92,255,.10)); }
+.mcq-option.right  { border-color: #2f9e63; background: rgba(47,158,99,.12); }
+.mcq-option.wrong  { border-color: #d1435b; background: rgba(209,67,91,.12); }
+.mcq-option:disabled { cursor: default; }
+.mcq-mark { width: 14px; flex: none; font-weight: 700; }
+
+
+/* Separator between concepts stacked on one card. */
+.card-next {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line);
+}
+
+
+/* A code snippet already shown earlier in the run. */
+.code-repeat {
+  font-size: 13px;
+  font-style: italic;
+  margin: 6px 0 0;
+}
+
+
+/* Concepts shown at one line: a tight list item, not a full section.
+   The citation and importance dots sat in their own column and ate roughly a
+   third of the card for information you only want occasionally, so they are
+   lifted out of the flow and revealed on hover/focus. */
+.concept.brief {
+  position: relative;
+  padding: 9px 0;
+  padding-right: 64px; /* gutter for the always-visible importance dots */
+}
+.concept.brief .brief-line {
+  margin: 0;
+  line-height: 1.55;
+  /* 78ch was a conservative prose measure and left a wide dead strip before
+     the importance dots. 88ch reclaims about half of it while keeping a little
+     air before the dots. Capped in ch rather than %, so the line does not grow
+     unreadably long — though in practice the page wrapper caps at 1080px, so
+     the card is ~994px whatever the window does. */
+  max-width: 88ch;
+}
+.concept.brief .brief-title {
+  color: var(--text);
+  font-weight: 650;
+}
+/* The importance dots stay put — they are small, and they are the one bit of
+   metadata worth seeing at a glance. The citation hangs off them on hover.
+   It used to fade in over the concept text, which read as a glitch; it now
+   drops BELOW the dots into the right gutter, so it never covers a word. */
+.concept.brief .brief-meta {
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+.concept.brief .brief-meta .imp {
+  cursor: help;
+}
+/* Revealed from the dots as a POPOVER. It is wider than the right gutter, so
+   it will sit over the text — that is fine for a tooltip, but only if it reads
+   as one. Opaque background and a shadow do that work; without them it looked
+   like a chip that had escaped its layout. */
+.concept.brief .brief-meta .cite,
+.concept:not(.brief) .meta .cite {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 6;
+  background: var(--card);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+  border-color: var(--accent-2);
+}
+.concept.brief .brief-meta:hover .cite,
+.concept.brief .brief-meta:focus-within .cite {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Consecutive brief items sit together as a list rather than separate blocks. */
+.card-next:has(.concept.brief) {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 1px solid var(--line);
+}
+
+
+/* Full-note concepts get the same treatment: the meta row hovers in rather
+   than occupying a line above every heading. */
+.concept:not(.brief) {
+  position: relative;
+  padding-right: 64px; /* same gutter as brief items */
+}
+.concept:not(.brief) .meta {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  margin-bottom: 0;
+  justify-content: flex-end;
+}
+/* The source badge is redundant with the citation, which carries the same
+   filename — hide it and let the citation do the work on hover. */
+.concept:not(.brief) .meta .badge {
+  display: none;
+}
+.concept:not(.brief) .meta:hover .cite,
+.concept:not(.brief) .meta:focus-within .cite {
+  opacity: 1;
+  pointer-events: auto;
+}
+.concept:not(.brief) .body,
+.concept:not(.brief) h2 {
+  max-width: 88ch;
+}
+
+/* Collapsed code: a quiet toggle that expands in place. */
+.codeblock {
+  margin: 10px 0 0;
+}
+.codeblock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 8px 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+}
+.codeblock.open .codeblock-head {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+.codeblock-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.codeblock-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.codeblock-toggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.codeblock-toggle .chev {
+  font-size: 10px;
+}
+.codeblock.open pre.code,
+.codeblock.open .slide-shot {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Card-wide expand/collapse, sits in the pace row. */
+.code-all {
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.code-all:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+
+/* A slide screenshot on a card. Capped so a 2000px render does not dominate,
+   and bordered because slides are white-on-white in light mode. */
+.slide-shot {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 10px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}

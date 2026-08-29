@@ -1,0 +1,11 @@
+# Lean backend env. videodistill's KB/review layers need only these five —
+# not the ASR/vision stack (faster-whisper, opencv, onnxruntime), so install
+# videodistill with --no-deps. See install steps in README.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+qdrant-client>=1.7
+openai>=1.30
+google-genai>=2.16.0
+pydantic>=2.6
+rank-bm25>=0.2
+python-dotenv>=1.0
