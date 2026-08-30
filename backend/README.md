@@ -23,6 +23,38 @@ to ignore incidental lecture examples — without that it grades on lecture
 trivia, and a sound general answer scored 17% instead of 75% in testing. The
 precomputed `keyPoints` remain as a fallback if the judge reply is unparseable.
 
+## Bring your own KB
+
+ReCall-nx reads a **ready-made Qdrant KB** — it doesn't build one. Prepare your
+notes with any pipeline that outputs a Qdrant store plus a `synthesis.json` per
+source (the public [Video-Distiller](https://github.com/Ayshine/Video-Distiller)
+does this from video), then drop the result under `$RECALL_DATA` and point the
+app at it.
+
+Each **source is its own folder, named by the collection** — add as many as you
+like:
+
+```
+$RECALL_DATA/                 (default ~/Documents/dbs/recall-data)
+  kb/                         one Qdrant store holding every collection
+  synthesis/
+    <section1_name>/          e.g. c/      one folder per source…
+      synthesis.json
+    <section2_name>/          e.g. cpp/    …named exactly as its collection
+      synthesis.json
+  media/
+    <section1_name>/          optional — slide images, served at /slides
+  cache/                      the app's own LLM cache (created on first run)
+```
+
+The collection name is the folder name and is what the UI's `collection` values
+map to (`/concepts?collection=c,cpp`). Once the folders are in place, run
+`precompute.py --collection <name>` once per source and start the API.
+
+> Note: retrieval, RAG and quiz generation currently go through the
+> `videodistill` library. Reducing that to `qdrant-client` + `openai` — so any
+> Qdrant KB works with no extra install — is the planned next refactor.
+
 ## Division of labour
 
 **The distiller pipeline owns the KB and the synthesis.** It turns videos into a

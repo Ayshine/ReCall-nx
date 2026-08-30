@@ -25,10 +25,10 @@ shortens the per-card pacing timer, so the whole review fits the budget.
 
 ## Sources
 
-The **source board** lists every course Video-Distiller has distilled. Click a
-card to toggle it into scope — review and quizzes span all selected sources at
-once (multi-select). **"+ Add source"** pulls in courses other people distilled;
-they appear as "distilling…" until their notes finish ingesting into the DB.
+The **source board** lists every course in your KB. Click a card to toggle it
+into scope — review and quizzes span all selected sources at once (multi-select).
+**"+ Add source"** pulls in courses other people distilled; they appear as
+"distilling…" until their notes finish ingesting into the DB.
 
 ## Three modes
 

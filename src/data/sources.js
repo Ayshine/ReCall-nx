@@ -1,4 +1,4 @@
-// Sources on the board are courses that Video-Distiller has turned into notes.
+// Sources on the board are courses a distiller pipeline has turned into notes.
 // `hasData` ones have a collection in the vector DB you can review + be quizzed
 // on. As more people distill courses, they show up in AVAILABLE_SOURCES and can
 // be added to the board; until their notes finish ingesting they read as

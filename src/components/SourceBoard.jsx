@@ -2,7 +2,7 @@ import { useState } from "react";
 
 // Multi-select board of distilled sources. Click a card to toggle it into the
 // active review/quiz scope; "+ Add source" pulls in courses others distilled
-// with Video-Distiller (they arrive as "distilling…" until their notes ingest).
+// (they arrive as "distilling…" until their notes ingest into the KB).
 export function SourceBoard({
   board,
   available,
@@ -66,7 +66,7 @@ export function SourceBoard({
       {adding && (
         <div className="add-panel">
           <p className="muted" style={{ margin: "0 0 10px", fontSize: 13 }}>
-            Courses the community distilled with Video-Distiller:
+            Courses others have distilled:
           </p>
           {available.length === 0 ? (
             <p className="muted" style={{ margin: 0, fontSize: 13 }}>
