@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "ReCall-nx — review your distilled video course at nx speed, then test recall.",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -81,3 +81,7 @@ src/
     QuizMode          active-recall quiz (we ask) + grading against the notes
     Citation          [collection/video @ ts] chips + answer renderer
 ```
+
+## License
+
+[MIT](LICENSE). Use it, fork it, bring your own KB.
