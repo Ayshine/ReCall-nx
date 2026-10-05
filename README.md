@@ -84,4 +84,14 @@ src/
 
 ## License
 
-[MIT](LICENSE). Use it, fork it, bring your own KB.
+[PolyForm Noncommercial 1.0.0](LICENSE) — **free for any noncommercial purpose**:
+personal study, research, teaching, charity. Fork it, change it, share it.
+
+**Commercial use requires a paid license.** If you make money with it — selling a
+course or product built on it, running it as a service, or using it internally at
+a for-profit company — get in touch via <https://www.ayshine-ai.co.uk/>.
+
+Earlier versions were published under MIT, kept at
+[LICENSE-MIT-historical](LICENSE-MIT-historical) for the record. That grant stands
+for the versions it was published with; everything from this commit on is
+PolyForm Noncommercial.
